@@ -1,6 +1,6 @@
 {
   "Name": "AutoCAD",
-  "Version": "0.1.0",
+  "Version": "0.2.0",
   "Author": "tmbk",
   "Description": "Commandes, macros et état AutoCAD",
   "Category": "AutoCAD",
@@ -11,10 +11,15 @@
   "SDKVersion": 1,
   "URL": "https://github.com/pepito2t/streamdock_autocad",
   "OS": [
-    { "Platform": "windows", "MinimumVersion": "10" }
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
   ],
   "ApplicationsToMonitor": {
-    "windows": ["acad.exe"]
+    "windows": [
+      "acad.exe"
+    ]
   },
   "Actions": [
     {
@@ -24,12 +29,18 @@
       "Icon": "images/macro.png",
       "state": 0,
       "States": [
-        { "Image": "images/macro.png", "TitleAlignment": "bottom", "FontSize": "11" }
+        {
+          "Image": "images/macro.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
       ],
       "Settings": {},
       "UserTitleEnabled": true,
       "SupportedInMultiActions": false,
-      "Controllers": ["Keypad"],
+      "Controllers": [
+        "Keypad"
+      ],
       "PropertyInspectorPath": "./propertyInspector/macro/index.html"
     },
     {
@@ -39,13 +50,23 @@
       "Icon": "images/toggle-on.png",
       "state": 0,
       "States": [
-        { "Image": "images/toggle-off.png", "TitleAlignment": "bottom", "FontSize": "11" },
-        { "Image": "images/toggle-on.png", "TitleAlignment": "bottom", "FontSize": "11" }
+        {
+          "Image": "images/toggle-off.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        },
+        {
+          "Image": "images/toggle-on.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
       ],
       "Settings": {},
       "UserTitleEnabled": true,
       "SupportedInMultiActions": false,
-      "Controllers": ["Keypad"],
+      "Controllers": [
+        "Keypad"
+      ],
       "PropertyInspectorPath": "./propertyInspector/toggle/index.html"
     },
     {
@@ -55,13 +76,23 @@
       "Icon": "images/layer-on.png",
       "state": 0,
       "States": [
-        { "Image": "images/layer-off.png", "TitleAlignment": "middle", "FontSize": "11" },
-        { "Image": "images/layer-on.png", "TitleAlignment": "middle", "FontSize": "11" }
+        {
+          "Image": "images/layer-off.png",
+          "TitleAlignment": "middle",
+          "FontSize": "11"
+        },
+        {
+          "Image": "images/layer-on.png",
+          "TitleAlignment": "middle",
+          "FontSize": "11"
+        }
       ],
       "Settings": {},
       "UserTitleEnabled": false,
       "SupportedInMultiActions": false,
-      "Controllers": ["Keypad"],
+      "Controllers": [
+        "Keypad"
+      ],
       "PropertyInspectorPath": "./propertyInspector/layer/index.html"
     },
     {
@@ -71,13 +102,41 @@
       "Icon": "images/status.png",
       "state": 0,
       "States": [
-        { "Image": "images/status.png", "TitleAlignment": "middle", "FontSize": "10" }
+        {
+          "Image": "images/status.png",
+          "TitleAlignment": "middle",
+          "FontSize": "10"
+        }
       ],
       "Settings": {},
       "UserTitleEnabled": false,
       "SupportedInMultiActions": false,
-      "Controllers": ["Keypad"],
+      "Controllers": [
+        "Keypad"
+      ],
       "PropertyInspectorPath": "./propertyInspector/status/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.dial",
+      "Name": "Molette",
+      "Tooltip": "Zoom, calque courant ou annuler/rétablir à la molette",
+      "Icon": "images/dial.png",
+      "state": 0,
+      "States": [
+        {
+          "Image": "images/dial.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": false,
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Knob",
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "./propertyInspector/dial/index.html"
     }
   ]
 }

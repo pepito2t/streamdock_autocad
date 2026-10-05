@@ -7,6 +7,9 @@ const $local = false, $back = false,
     didReceiveSettings() {
       $dom.variable.value = $settings.variable || 'ORTHOMODE';
     },
+    sendToPropertyInspector(data) {
+      handleNotice(data);
+    },
   };
 
 $dom.variable.on('change', () => { $settings.variable = $dom.variable.value; });

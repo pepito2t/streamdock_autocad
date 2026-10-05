@@ -10,6 +10,7 @@ Plugin Stream Dock (Mirabox / logiciel HotSpot) pour piloter AutoCAD sous Window
 | Bascule | Active/désactive ORTHO, accrochage objets, accrochage grille, grille, épaisseurs. La touche reflète l'état réel d'AutoCAD. |
 | Calque  | Rend un calque courant (le crée si besoin). La touche affiche le calque actif. |
 | État    | Affiche le calque courant, le nom du dessin ou les modes actifs. |
+| Molette | Sur un bouton rotatif : zoom (appui = zoom étendu), calque courant (appui = calque 0) ou annuler/rétablir (appui = régénérer). |
 
 ## Fonctionnement
 
@@ -22,6 +23,23 @@ Les presets livrés sont dans `com.tmbk.streamdock.autocad.sdPlugin/presets/`. L
 
 Écrire les commandes avec le préfixe `_.` (indépendant de la langue, ignore les redéfinitions) et la variante `-` des commandes
 qui ouvrent une boîte de dialogue (`_.-LAYER`, `_.-BLOCK`, `_.-INSERT`).
+
+### Étapes AutoLISP
+
+Une étape `@lisp fichier.lsp` charge ce fichier avant la suite. Les fichiers sont cherchés dans
+`%APPDATA%\tmbk\streamdock-autocad\presets\lisp\` (perso, prioritaire) puis dans `presets/lisp/` du plugin.
+Le preset « Cube + bloc » utilise `cube.lsp` : il demande le nom, la taille et le point d'insertion dans la ligne de commande,
+dessine le cube, le convertit en bloc et l'insère.
+
+```json
+{ "name": "Cube + bloc", "steps": ["@lisp cube.lsp", "(c:tmbk-cube)"] }
+```
+
+### Erreurs et mises à jour
+
+Une action qui échoue affiche le triangle d'alerte, écrit le message dans la ligne de commande AutoCAD (préfixe « Stream Dock : »)
+et dans le panneau de la touche. Le plugin vérifie la dernière release GitHub toutes les six heures ; une version plus récente
+apparaît en haut du panneau de chaque touche avec un lien vers la page de téléchargement.
 
 ## Prérequis (poste Windows)
 
@@ -58,7 +76,7 @@ Debug : `http://localhost:23519/` liste les plugins chargés. Logs du plugin : `
 ```bash
 uv sync --group dev
 uv run pytest
-uv run python scripts/make_icons.py   # régénère les icônes placeholder
+uv run python scripts/make_icons.py   # régénère les icônes (Pillow)
 ```
 
 Hors Windows, le plugin utilise un bridge AutoCAD simulé (`src/bridge/autocad_fake.py`) : les tests tournent partout,

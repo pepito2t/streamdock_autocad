@@ -114,6 +114,16 @@ class ComAutocadBridge:
 
         self._submit(add_layer)
 
+    def list_layers(self) -> list[str]:
+        def read_names() -> list[str]:
+            layers = self._document().Layers
+            return sorted((layers.Item(index).Name for index in range(layers.Count)), key=str.lower)
+
+        return self._submit(read_names)
+
+    def prompt(self, message: str) -> None:
+        self._submit(lambda: self._document().Utility.Prompt(message + "\n"))
+
     def reset(self) -> None:
         def drop() -> None:
             self._app = None

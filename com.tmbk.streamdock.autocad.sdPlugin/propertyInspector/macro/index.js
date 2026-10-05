@@ -30,10 +30,9 @@ const $propEvent = {
     if (data.event === 'presets') {
       presets = data.presets;
       renderPresets();
-      showMessage('');
-    } else if (data.event === 'error') {
-      showMessage(data.message);
+      return;
     }
+    handleNotice(data);
   },
 };
 
@@ -59,7 +58,7 @@ function renderPresets() {
 
 function renderPresetDetails() {
   const preset = currentPreset();
-  $dom.presetDescription.textContent = preset ? preset.description : '';
+  $dom.presetDescription.textContent = preset ? `${preset.description}\n\n${stepsPreview(preset)}` : '';
   $dom.deletePreset.disabled = !preset || preset.builtin;
 }
 
@@ -71,6 +70,10 @@ function renderMode() {
 
 function showMessage(text) {
   $dom.message.textContent = text;
+}
+
+function stepsPreview(preset) {
+  return preset.steps.join('\n');
 }
 
 [$dom.modePreset, $dom.modeCustom].forEach(radio => radio.on('change', () => {
@@ -108,5 +111,7 @@ $dom.savePreset.on('click', () => {
     showMessage('Donne un nom au preset.');
     return;
   }
+  clearError();
+  showMessage('');
   $websocket.sendToPlugin({ command: 'save', macro: { name, steps: $dom.steps.value } });
 });

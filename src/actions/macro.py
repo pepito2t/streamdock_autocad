@@ -16,15 +16,10 @@ class MacroAction(AutocadAction):
         self.store = PresetStore()
 
     def on_key_up(self, payload: dict) -> None:
-        try:
-            macro = self._resolve_macro()
-        except (InvalidMacro, PresetNotFound) as error:
-            Logger.error(f"[MacroAction] invalid configuration: {error}")
-            self.show_alert()
-            return
-        self.perform(lambda: run_macro(self.bridge, macro))
+        self.perform(self._run_configured_macro)
 
     def on_property_inspector_did_appear(self, data: dict) -> None:
+        super().on_property_inspector_did_appear(data)
         self._send_presets()
 
     def on_send_to_plugin(self, payload: dict) -> None:
@@ -41,14 +36,20 @@ class MacroAction(AutocadAction):
             self.send_to_property_inspector({"event": "error", "message": str(error)})
         self._send_presets()
 
+    def _run_configured_macro(self) -> None:
+        run_macro(self.bridge, self._resolve_macro(), self.store.resolve_lisp)
+
     def _resolve_macro(self) -> Macro:
         if self.settings.get("mode", MODE_PRESET) == MODE_CUSTOM:
             steps = parse_steps(self.settings.get("steps", ""))
             return Macro(id="custom", name="custom", steps=steps)
         preset_id = self.settings.get("preset")
         if not preset_id:
-            raise PresetNotFound("no preset selected")
-        return self.store.get(str(preset_id))
+            raise InvalidMacro("aucun preset sélectionné")
+        try:
+            return self.store.get(str(preset_id))
+        except PresetNotFound as error:
+            raise InvalidMacro(f"preset introuvable : {preset_id}") from error
 
     def _send_presets(self) -> None:
         presets = [macro.to_dict() for macro in self.store.list()]

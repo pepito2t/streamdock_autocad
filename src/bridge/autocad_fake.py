@@ -20,6 +20,7 @@ class FakeAutocadBridge:
         self.vars: dict[str, Any] = dict(DEFAULT_VARS)
         self.layers: set[str] = {"0"}
         self.sent: list[str] = []
+        self.prompts: list[str] = []
 
     def _check_running(self) -> None:
         if not self.running:
@@ -47,6 +48,14 @@ class FakeAutocadBridge:
     def ensure_layer(self, name: str) -> None:
         self._check_running()
         self.layers.add(name)
+
+    def list_layers(self) -> list[str]:
+        self._check_running()
+        return sorted(self.layers, key=str.lower)
+
+    def prompt(self, message: str) -> None:
+        self._check_running()
+        self.prompts.append(message)
 
     def reset(self) -> None:
         pass

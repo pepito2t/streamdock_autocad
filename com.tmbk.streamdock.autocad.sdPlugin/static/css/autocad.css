@@ -6,3 +6,14 @@
 button:disabled {
   opacity: 0.4;
 }
+.notice:empty {
+  display: none;
+}
+#notice-update a {
+  color: #f0a030;
+  font-weight: bold;
+}
+#notice-error {
+  color: #e05050;
+  white-space: pre-wrap;
+}
