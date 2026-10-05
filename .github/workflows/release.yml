@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  windows:
+    name: Windows plugin
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+      - run: uv sync --locked --group dev
+      - name: Version matches tag
+        run: uv run python scripts/version.py check --tag "${GITHUB_REF_NAME}"
+      - run: uv run pytest
+      - name: Build plugin.exe
+        run: |
+          uv run pyinstaller build.spec --noconfirm --clean
+          cp dist/plugin.exe com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
+      - name: Smoke test frozen plugin
+        run: uv run python scripts/smoke_plugin.py com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
+      - name: Pack
+        run: uv run python scripts/pack.py
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          gh release create "${GITHUB_REF_NAME}"
+          dist/com.tmbk.streamdock.autocad.sdPlugin.zip
+          --title "AutoCAD Stream Dock ${GITHUB_REF_NAME}"
+          --notes "Plugin Stream Dock AutoCAD. Drawflow l'installe automatiquement ; sinon dézippez dans %APPDATA%\\HotSpot\\StreamDock\\plugins et relancez Stream Dock."
+          --prerelease="${{ contains(github.ref_name, '-') }}"
