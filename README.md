@@ -32,9 +32,24 @@ qui ouvrent une boîte de dialogue (`_.-LAYER`, `_.-BLOCK`, `_.-INSERT`).
 ## Build et installation
 
 ```powershell
-scripts\build.ps1     # uv sync + PyInstaller -> plugin.exe dans le .sdPlugin
+scripts\build.ps1     # uv sync + PyInstaller -> plugin.exe dans le .sdPlugin + dist\<plugin>.zip
 scripts\install.ps1   # copie dans %APPDATA%\HotSpot\StreamDock\plugins et relance Stream Dock
 ```
+
+## Release et installation depuis Drawflow
+
+Un tag `vX.Y.Z` déclenche `release.yml` : build Windows, smoke test, zip puis GitHub Release avec l'asset
+`com.tmbk.streamdock.autocad.sdPlugin.zip`. Le zip contient le dossier `com.tmbk.streamdock.autocad.sdPlugin/` à la racine,
+le format que l'installateur de Drawflow dézippe dans Stream Dock.
+
+```bash
+uv run python scripts/version.py bump 0.2.0   # pyproject + manifest
+git commit -am "chore: release 0.2.0" && git tag v0.2.0 && git push --tags
+```
+
+URL stable de la dernière version :
+`https://github.com/pepito2t/streamdock_autocad/releases/latest/download/com.tmbk.streamdock.autocad.sdPlugin.zip`
+(ou `.../releases/download/vX.Y.Z/...` pour une version précise). La CI (`ci.yml`) produit le même zip en artefact sur chaque PR.
 
 Debug : `http://localhost:23519/` liste les plugins chargés. Logs du plugin : `<dossier du plugin>\logs\plugin.log`.
 

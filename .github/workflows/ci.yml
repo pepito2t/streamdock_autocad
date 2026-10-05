@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  tests:
+    name: Tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked --group dev
+      - name: Versions synchronized
+        run: uv run python scripts/version.py check
+      - run: uv run pytest
+
+  plugin:
+    name: Windows plugin
+    needs: tests
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync --locked --group dev
+      - name: Build plugin.exe
+        run: |
+          uv run pyinstaller build.spec --noconfirm --clean
+          cp dist/plugin.exe com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
+      - name: Smoke test frozen plugin
+        run: uv run python scripts/smoke_plugin.py com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
+      - name: Pack
+        run: uv run python scripts/pack.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: com.tmbk.streamdock.autocad.sdPlugin
+          path: dist/com.tmbk.streamdock.autocad.sdPlugin.zip
+          retention-days: 14

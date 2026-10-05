@@ -4,4 +4,4 @@ Set-Location $root
 uv sync --group dev
 uv run pyinstaller build.spec --noconfirm --clean
 Copy-Item "$root\dist\plugin.exe" "$root\com.tmbk.streamdock.autocad.sdPlugin\plugin.exe" -Force
-Write-Host "plugin.exe copied into the .sdPlugin folder"
+uv run python scripts/pack.py
