@@ -1,11 +1,5 @@
 {
   "name": "Cube + bloc",
-  "description": "Crée le calque Cube, dessine une boîte de 100 et la convertit en bloc nommé Cube",
-  "steps": [
-    "_.-LAYER _M Cube",
-    "",
-    "_.BOX 0,0,0 _L 100 100 100",
-    "_.-BLOCK Cube 0,0,0 _L",
-    ""
-  ]
+  "description": "Demande le nom, la taille et le point d'insertion, dessine le cube, le convertit en bloc et l'insère (AutoLISP cube.lsp)",
+  "steps": ["@lisp cube.lsp", "(c:tmbk-cube)"]
 }

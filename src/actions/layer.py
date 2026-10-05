@@ -19,9 +19,17 @@ class LayerAction(AutocadAction):
 
     def on_key_up(self, payload: dict) -> None:
         if not self.layer_name:
-            self.show_alert()
+            self.report_error(AutocadError("aucun calque configuré sur cette touche"))
             return
         self.perform(self._activate)
+
+    def on_property_inspector_did_appear(self, data: dict) -> None:
+        super().on_property_inspector_did_appear(data)
+        self._send_layers()
+
+    def on_send_to_plugin(self, payload: dict) -> None:
+        if payload.get("command") == "layers":
+            self._send_layers()
 
     def refresh(self, snapshot: dict[str, Any] | None) -> None:
         if snapshot is None:
@@ -39,4 +47,12 @@ class LayerAction(AutocadAction):
         try:
             self.bridge.set_var("CLAYER", self.layer_name)
         except AutocadError as error:
-            raise AutocadError(f"cannot activate layer {self.layer_name!r}: {error}") from error
+            raise AutocadError(f"calque {self.layer_name!r} inaccessible : {error}") from error
+
+    def _send_layers(self) -> None:
+        try:
+            layers = self.bridge.list_layers()
+            current = str(self.bridge.get_var("CLAYER"))
+        except AutocadError:
+            layers, current = [], ""
+        self.send_to_property_inspector({"event": "layers", "layers": layers, "current": current})

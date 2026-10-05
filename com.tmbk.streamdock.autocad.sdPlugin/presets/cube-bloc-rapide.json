@@ -1,0 +1,5 @@
+{
+  "name": "Cube + bloc (rapide)",
+  "description": "Sans question : calque Cube, boîte de 100 à l'origine, bloc Cube",
+  "steps": ["_.-LAYER _M Cube", "", "_.BOX 0,0,0 _C 100", "_.-BLOCK Cube 0,0,0 _L", ""]
+}

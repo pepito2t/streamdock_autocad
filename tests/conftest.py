@@ -51,11 +51,19 @@ def preset_dirs(tmp_path: Path) -> tuple[Path, Path]:
     bundled = tmp_path / "bundled"
     bundled.mkdir()
     (bundled / "zoom.json").write_text(json.dumps({"name": "Zoom", "steps": ["_.ZOOM _E"]}), encoding="utf-8")
+    (bundled / "cube.json").write_text(
+        json.dumps({"name": "Cube", "steps": ["@lisp cube.lsp", "(c:tmbk-cube)"]}), encoding="utf-8"
+    )
+    (bundled / "lisp").mkdir()
+    (bundled / "lisp" / "cube.lsp").write_text("(defun c:tmbk-cube () (princ))", encoding="utf-8")
     return bundled, tmp_path / "user"
 
 
 @pytest.fixture(autouse=True)
-def fresh_state():
+def fresh_state(monkeypatch):
+    from src import update_check
     from src.autocad_state import get_state
 
     get_state().invalidate()
+    monkeypatch.setattr(update_check, "_checker", update_check.UpdateChecker(fetch=lambda: "v0.0.0", current=lambda: "0.1.0"))
+    monkeypatch.setattr(update_check.UpdateChecker, "start", lambda self: None)

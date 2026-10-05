@@ -1,15 +1,15 @@
 const $local = false, $back = false,
   $dom = {
     main: $('.sdpi-wrapper'),
-    field: $('#field'),
+    function: $('#function'),
   },
   $propEvent = {
     didReceiveSettings() {
-      $dom.field.value = $settings.field || 'layer';
+      $dom.function.value = $settings.function || 'zoom';
     },
     sendToPropertyInspector(data) {
       handleNotice(data);
     },
   };
 
-$dom.field.on('change', () => { $settings.field = $dom.field.value; });
+$dom.function.on('change', () => { $settings.function = $dom.function.value; });

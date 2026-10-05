@@ -15,6 +15,14 @@ class PresetReadOnly(PermissionError):
     pass
 
 
+class LispNotFound(InvalidMacro):
+    pass
+
+
+LISP_SUBDIR = "lisp"
+LISP_SUFFIX = ".lsp"
+
+
 class PresetStore:
     def __init__(self, bundled_dir: Path | None = None, user_dir: Path | None = None) -> None:
         self.bundled_dir = bundled_dir or bundled_presets_dir()
@@ -47,6 +55,15 @@ class PresetStore:
                 raise PresetReadOnly(macro_id)
             raise PresetNotFound(macro_id)
         path.unlink()
+
+    def resolve_lisp(self, file_name: str) -> Path:
+        if Path(file_name).name != file_name or not file_name.lower().endswith(LISP_SUFFIX):
+            raise LispNotFound(f"nom de fichier LISP invalide : {file_name!r}")
+        for directory in (self.user_dir, self.bundled_dir):
+            candidate = directory / LISP_SUBDIR / file_name
+            if candidate.is_file():
+                return candidate
+        raise LispNotFound(f"fichier LISP introuvable : {file_name}")
 
     def _load_dir(self, directory: Path, builtin: bool) -> dict[str, Macro]:
         macros: dict[str, Macro] = {}

@@ -9,7 +9,7 @@ from src.macros.preset_store import PresetNotFound, PresetReadOnly, PresetStore
 def test_lists_bundled_presets_when_user_dir_missing(preset_dirs):
     store = PresetStore(*preset_dirs)
     presets = store.list()
-    assert [preset.id for preset in presets] == ["zoom"]
+    assert [preset.id for preset in presets] == ["cube", "zoom"]
     assert presets[0].builtin is True
 
 
@@ -48,4 +48,4 @@ def test_corrupt_file_is_skipped(preset_dirs):
     bundled, user = preset_dirs
     (bundled / "broken.json").write_text("{not json", encoding="utf-8")
     (bundled / "nosteps.json").write_text(json.dumps({"name": "X"}), encoding="utf-8")
-    assert [preset.id for preset in PresetStore(bundled, user).list()] == ["zoom"]
+    assert [preset.id for preset in PresetStore(bundled, user).list()] == ["cube", "zoom"]

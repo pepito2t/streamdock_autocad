@@ -8,6 +8,14 @@
 </head>
 <body>
   <div class="sdpi-wrapper" style="display: none">
+    <div type="select" class="sdpi-item">
+      <div class="sdpi-item-label">Calques du dessin</div>
+      <select id="layer-select" class="sdpi-item-value"></select>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <button id="refresh-layers" class="sdpi-item-value">Rafraîchir la liste</button>
+    </div>
     <div class="sdpi-item">
       <div class="sdpi-item-label">Calque</div>
       <input id="layer" class="sdpi-item-value" placeholder="Nom du calque" />
@@ -24,6 +32,7 @@
   </div>
   <script src="../../static/utils/common.js"></script>
   <script src="../../static/action.js"></script>
+  <script src="../../static/autocad-pi.js"></script>
   <script src="index.js"></script>
 </body>
 </html>

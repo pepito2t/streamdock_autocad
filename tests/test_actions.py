@@ -31,6 +31,42 @@ def test_macro_without_preset_alerts(bridge, plugin, preset_dirs):
     action.on_key_up({})
     assert bridge.sent == []
     assert plugin.ws.events("showAlert")
+    error = plugin.ws.events("sendToPropertyInspector")[-1]["payload"]
+    assert error["event"] == "error" and "preset" in error["message"]
+
+
+def test_macro_lisp_step_loads_file_then_runs(bridge, plugin, preset_dirs):
+    bundled, _ = preset_dirs
+    action = make_macro_action(plugin, preset_dirs, {"mode": "preset", "preset": "cube"})
+    action.on_key_up({})
+    expected_path = (bundled / "lisp" / "cube.lsp").as_posix()
+    assert bridge.sent == [f'(load "{expected_path}")\n(c:tmbk-cube)\n']
+
+
+def test_macro_missing_lisp_reports_error(bridge, plugin, preset_dirs):
+    action = make_macro_action(plugin, preset_dirs, {"mode": "custom", "steps": "@lisp nope.lsp"})
+    action.on_key_up({})
+    assert bridge.sent == []
+    assert "nope.lsp" in plugin.ws.events("sendToPropertyInspector")[-1]["payload"]["message"]
+
+
+def test_error_is_echoed_in_autocad_prompt(bridge, plugin, preset_dirs):
+    action = make_macro_action(plugin, preset_dirs, {"mode": "preset"})
+    action.on_key_up({})
+    assert bridge.prompts and bridge.prompts[0].startswith("Stream Dock : ")
+
+
+def test_property_inspector_receives_last_error_and_update(bridge, plugin, preset_dirs, monkeypatch):
+    from src import update_check
+
+    monkeypatch.setattr(update_check, "_checker", update_check.UpdateChecker(fetch=lambda: "v9.0.0", current=lambda: "0.1.0"))
+    update_check.get_checker().check_once()
+    action = make_macro_action(plugin, preset_dirs, {"mode": "preset"})
+    action.on_key_up({})
+    plugin.ws.messages.clear()
+    action.on_property_inspector_did_appear({})
+    events = [message["payload"]["event"] for message in plugin.ws.events("sendToPropertyInspector")]
+    assert events == ["update", "error", "presets"]
 
 
 def test_macro_alerts_when_autocad_is_closed(bridge, plugin, preset_dirs):
@@ -45,7 +81,7 @@ def test_macro_save_from_property_inspector(bridge, plugin, preset_dirs):
     action.on_send_to_plugin({"command": "save", "macro": {"name": "Mien", "steps": "_.CIRCLE"}})
     sent = plugin.ws.events("sendToPropertyInspector")[-1]["payload"]
     assert sent["event"] == "presets"
-    assert {preset["id"] for preset in sent["presets"]} == {"zoom", "mien"}
+    assert {preset["id"] for preset in sent["presets"]} == {"zoom", "cube", "mien"}
 
 
 def test_macro_invalid_save_reports_error(bridge, plugin, preset_dirs):
@@ -80,6 +116,27 @@ def test_layer_activates_and_creates_layer(bridge, plugin):
     plugin.timer.fire_all()
     assert plugin.ws.events("setTitle")[-1]["payload"]["title"] == "Murs"
     assert plugin.ws.events("setState")[-1]["payload"]["state"] == 1
+
+
+def test_layer_sends_layer_list_to_property_inspector(bridge, plugin):
+    bridge.layers.update({"Murs", "Cotes"})
+    bridge.vars["CLAYER"] = "Murs"
+    action = LayerAction("x.layer", "ctx-layer", {"layer": "Murs"}, plugin)
+    action.on_property_inspector_did_appear({})
+    payload = plugin.ws.events("sendToPropertyInspector")[-1]["payload"]
+    assert payload == {"event": "layers", "layers": ["0", "Cotes", "Murs"], "current": "Murs"}
+
+
+def test_layer_list_is_empty_when_autocad_closed(bridge, plugin):
+    bridge.running = False
+    action = LayerAction("x.layer", "ctx-layer", {}, plugin)
+    action.on_send_to_plugin({"command": "layers"})
+    assert plugin.ws.events("sendToPropertyInspector")[-1]["payload"]["layers"] == []
+
+
+def test_layer_without_name_reports_error(bridge, plugin):
+    LayerAction("x.layer", "ctx-layer", {}, plugin).on_key_up({})
+    assert "calque" in plugin.ws.events("sendToPropertyInspector")[-1]["payload"]["message"]
 
 
 def test_layer_shows_disconnected_title(bridge, plugin):
