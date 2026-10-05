@@ -1,0 +1,5 @@
+{
+  "name": "Zoom étendu",
+  "description": "Zoom sur l'ensemble du dessin",
+  "steps": ["_.ZOOM _E"]
+}

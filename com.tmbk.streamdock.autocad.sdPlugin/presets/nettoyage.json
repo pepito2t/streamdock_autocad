@@ -1,0 +1,5 @@
+{
+  "name": "Nettoyage",
+  "description": "Purge tout sans confirmation puis audit avec correction",
+  "steps": ["_.-PURGE _A * _N", "_.AUDIT _Y"]
+}

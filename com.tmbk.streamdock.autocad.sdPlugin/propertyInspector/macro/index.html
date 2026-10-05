@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>AutoCAD - Macro</title>
+  <link rel="stylesheet" href="../../static/css/sdpi.css" />
+  <link rel="stylesheet" href="../../static/css/autocad.css" />
+</head>
+<body>
+  <div class="sdpi-wrapper" style="display: none">
+    <div type="radio" class="sdpi-item">
+      <div class="sdpi-item-label">Source</div>
+      <div class="sdpi-item-value">
+        <span class="sdpi-item-child">
+          <input id="mode-preset" type="radio" name="mode" value="preset" checked />
+          <label for="mode-preset" class="sdpi-item-label"><span></span>Preset</label>
+        </span>
+        <span class="sdpi-item-child">
+          <input id="mode-custom" type="radio" name="mode" value="custom" />
+          <label for="mode-custom" class="sdpi-item-label"><span></span>Personnalisé</label>
+        </span>
+      </div>
+    </div>
+
+    <div id="preset-section">
+      <div type="select" class="sdpi-item">
+        <div class="sdpi-item-label">Preset</div>
+        <select id="preset" class="sdpi-item-value"></select>
+      </div>
+      <div class="sdpi-item">
+        <div class="sdpi-item-label"></div>
+        <div id="preset-description" class="sdpi-item-value hint"></div>
+      </div>
+      <div class="sdpi-item">
+        <div class="sdpi-item-label"></div>
+        <button id="edit-preset" class="sdpi-item-value">Modifier en personnalisé</button>
+      </div>
+      <div class="sdpi-item">
+        <div class="sdpi-item-label"></div>
+        <button id="delete-preset" class="sdpi-item-value">Supprimer ce preset</button>
+      </div>
+    </div>
+
+    <div id="custom-section">
+      <div type="textarea" class="sdpi-item">
+        <div class="sdpi-item-label">Commandes</div>
+        <textarea id="steps" class="sdpi-item-value" rows="8" placeholder="Une commande par ligne, ligne vide = Entrée"></textarea>
+      </div>
+      <div class="sdpi-item">
+        <div class="sdpi-item-label">Nom</div>
+        <input id="save-name" class="sdpi-item-value" placeholder="Nom du preset" />
+      </div>
+      <div class="sdpi-item">
+        <div class="sdpi-item-label"></div>
+        <button id="save-preset" class="sdpi-item-value">Enregistrer comme preset</button>
+      </div>
+    </div>
+
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <div id="message" class="sdpi-item-value hint"></div>
+    </div>
+  </div>
+  <script src="../../static/utils/common.js"></script>
+  <script src="../../static/action.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

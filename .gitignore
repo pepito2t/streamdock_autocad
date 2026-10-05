@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+logs/
+*.spec.bak
+com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
+com.tmbk.streamdock.autocad.sdPlugin/logs/
+.pytest_cache/
+.DS_Store

@@ -1,0 +1,19 @@
+[project]
+name = "streamdock-autocad"
+version = "0.1.0"
+description = "Stream Dock plugin to drive AutoCAD (Windows, COM)"
+requires-python = ">=3.12"
+dependencies = [
+    "websocket-client>=1.8.0",
+    "pywin32>=306; sys_platform == 'win32'",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pyinstaller>=6.12",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

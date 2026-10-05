@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>AutoCAD - Bascule</title>
+  <link rel="stylesheet" href="../../static/css/sdpi.css" />
+  <link rel="stylesheet" href="../../static/css/autocad.css" />
+</head>
+<body>
+  <div class="sdpi-wrapper" style="display: none">
+    <div type="select" class="sdpi-item">
+      <div class="sdpi-item-label">Mode</div>
+      <select id="variable" class="sdpi-item-value">
+        <option value="ORTHOMODE">Ortho (F8)</option>
+        <option value="OSMODE">Accrochage objets (F3)</option>
+        <option value="SNAPMODE">Accrochage grille (F9)</option>
+        <option value="GRIDMODE">Grille (F7)</option>
+        <option value="LWDISPLAY">Épaisseurs de ligne</option>
+      </select>
+    </div>
+  </div>
+  <script src="../../static/utils/common.js"></script>
+  <script src="../../static/action.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

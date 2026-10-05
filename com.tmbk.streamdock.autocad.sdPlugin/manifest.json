@@ -1,0 +1,83 @@
+{
+  "Name": "AutoCAD",
+  "Version": "0.1.0",
+  "Author": "tmbk",
+  "Description": "Commandes, macros et état AutoCAD",
+  "Category": "AutoCAD",
+  "Icon": "images/category.png",
+  "CategoryIcon": "images/category.png",
+  "CodePath": "plugin.exe",
+  "CodePathWin": "plugin.exe",
+  "SDKVersion": 1,
+  "URL": "https://github.com/pepito2t/streamdock_autocad",
+  "OS": [
+    { "Platform": "windows", "MinimumVersion": "10" }
+  ],
+  "ApplicationsToMonitor": {
+    "windows": ["acad.exe"]
+  },
+  "Actions": [
+    {
+      "UUID": "com.tmbk.streamdock.autocad.macro",
+      "Name": "Macro",
+      "Tooltip": "Exécute un preset ou une suite de commandes AutoCAD",
+      "Icon": "images/macro.png",
+      "state": 0,
+      "States": [
+        { "Image": "images/macro.png", "TitleAlignment": "bottom", "FontSize": "11" }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "./propertyInspector/macro/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.toggle",
+      "Name": "Bascule",
+      "Tooltip": "Active/désactive ORTHO, accrochages, grille…",
+      "Icon": "images/toggle-on.png",
+      "state": 0,
+      "States": [
+        { "Image": "images/toggle-off.png", "TitleAlignment": "bottom", "FontSize": "11" },
+        { "Image": "images/toggle-on.png", "TitleAlignment": "bottom", "FontSize": "11" }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "./propertyInspector/toggle/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.layer",
+      "Name": "Calque",
+      "Tooltip": "Rend un calque courant, affiche le calque actif",
+      "Icon": "images/layer-on.png",
+      "state": 0,
+      "States": [
+        { "Image": "images/layer-off.png", "TitleAlignment": "middle", "FontSize": "11" },
+        { "Image": "images/layer-on.png", "TitleAlignment": "middle", "FontSize": "11" }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": false,
+      "SupportedInMultiActions": false,
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "./propertyInspector/layer/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.status",
+      "Name": "État",
+      "Tooltip": "Affiche le dessin, le calque ou les modes actifs",
+      "Icon": "images/status.png",
+      "state": 0,
+      "States": [
+        { "Image": "images/status.png", "TitleAlignment": "middle", "FontSize": "10" }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": false,
+      "SupportedInMultiActions": false,
+      "Controllers": ["Keypad"],
+      "PropertyInspectorPath": "./propertyInspector/status/index.html"
+    }
+  ]
+}

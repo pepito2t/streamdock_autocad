@@ -1,0 +1,11 @@
+{
+  "name": "Cube + bloc",
+  "description": "Crée le calque Cube, dessine une boîte de 100 et la convertit en bloc nommé Cube",
+  "steps": [
+    "_.-LAYER _M Cube",
+    "",
+    "_.BOX 0,0,0 _L 100 100 100",
+    "_.-BLOCK Cube 0,0,0 _L",
+    ""
+  ]
+}
