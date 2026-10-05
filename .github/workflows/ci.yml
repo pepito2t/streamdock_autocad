@@ -23,8 +23,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
         with:
           enable-cache: true
       - run: uv sync --locked --group dev
@@ -38,8 +38,8 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
         with:
           enable-cache: true
       - run: uv sync --locked --group dev
@@ -51,7 +51,7 @@ jobs:
         run: uv run python scripts/smoke_plugin.py com.tmbk.streamdock.autocad.sdPlugin/plugin.exe
       - name: Pack
         run: uv run python scripts/pack.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: com.tmbk.streamdock.autocad.sdPlugin
           path: dist/com.tmbk.streamdock.autocad.sdPlugin.zip
