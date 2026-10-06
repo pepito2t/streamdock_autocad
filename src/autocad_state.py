@@ -6,7 +6,7 @@ from src.bridge import get_bridge
 from src.bridge.autocad_bridge import AutocadError
 from src.core.logger import Logger
 
-WATCHED_VARS = ["CLAYER", "ORTHOMODE", "SNAPMODE", "GRIDMODE", "OSMODE", "LWDISPLAY", "DWGNAME"]
+WATCHED_VARS = ["CLAYER", "ORTHOMODE", "SNAPMODE", "GRIDMODE", "OSMODE", "LWDISPLAY", "DWGNAME", "DWGPREFIX", "DWGTITLED"]
 CACHE_TTL_S = 0.8
 
 

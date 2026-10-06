@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>AutoCAD - Drawflow</title>
+  <link rel="stylesheet" href="../../static/css/sdpi.css" />
+  <link rel="stylesheet" href="../../static/css/autocad.css" />
+</head>
+<body>
+  <div class="sdpi-wrapper" style="display: none">
+    <div type="select" class="sdpi-item">
+      <div class="sdpi-item-label">Module Drawflow</div>
+      <select id="module" class="sdpi-item-value"></select>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <button id="refresh-modules" class="sdpi-item-value">Rafraîchir la liste</button>
+    </div>
+    <div type="checkbox" class="sdpi-item">
+      <div class="sdpi-item-label">Projet</div>
+      <div class="sdpi-item-value">
+        <span class="sdpi-item-child">
+          <input id="project-from-name" type="checkbox" checked />
+          <label for="project-from-name"><span></span>Nom du projet = nom du dessin</label>
+        </span>
+      </div>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <div id="message" class="sdpi-item-value hint">Envoie le dessin ouvert et enregistré au module choisi. Drawflow doit être lancée avec l'API locale activée.</div>
+    </div>
+  </div>
+  <script src="../../static/utils/common.js"></script>
+  <script src="../../static/action.js"></script>
+  <script src="../../static/autocad-pi.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

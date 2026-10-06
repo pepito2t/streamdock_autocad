@@ -1,6 +1,6 @@
 [project]
 name = "streamdock-autocad"
-version = "0.2.0"
+version = "0.3.0"
 description = "Stream Dock plugin to drive AutoCAD (Windows, COM)"
 requires-python = ">=3.12"
 dependencies = [

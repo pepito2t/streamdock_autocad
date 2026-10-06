@@ -10,6 +10,9 @@ Plugin Stream Dock (Mirabox / logiciel HotSpot) pour piloter AutoCAD sous Window
 | Bascule | Active/désactive ORTHO, accrochage objets, accrochage grille, grille, épaisseurs. La touche reflète l'état réel d'AutoCAD. |
 | Calque  | Rend un calque courant (le crée si besoin). La touche affiche le calque actif. |
 | État    | Affiche le calque courant, le nom du dessin ou les modes actifs. |
+| Drawflow | Envoie le dessin ouvert (enregistré) à un module Drawflow via son API locale, nom du projet = nom du dessin. |
+| Bloc    | Insère un bloc du dessin au point cliqué, échelle et rotation fixes ou demandées. Liste des blocs dans le panneau. |
+| Imprimer | Imprime la présentation courante avec une mise en page nommée, ou l'exporte en PDF (nom du dessin) dans un dossier. |
 | Molette | Sur un bouton rotatif : zoom (appui = zoom étendu), calque courant (appui = calque 0) ou annuler/rétablir (appui = régénérer). |
 
 ## Fonctionnement
@@ -34,6 +37,13 @@ dessine le cube, le convertit en bloc et l'insère.
 ```json
 { "name": "Cube + bloc", "steps": ["@lisp cube.lsp", "(c:tmbk-cube)"] }
 ```
+
+### Drawflow
+
+La touche Drawflow lit le port et le jeton dans `%APPDATA%\ch.drawflow.desktop\integrations.json` (API locale activée dans
+Paramètres → API locale de Drawflow), ouvre une connexion WebSocket le temps de la commande et appelle `feature.run` avec le
+chemin du dessin dans `files`. Le formulaire s'ouvre rempli dans Drawflow ; les champs manquants (dossier de sortie) se
+complètent là-bas.
 
 ### Erreurs et mises à jour
 
