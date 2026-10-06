@@ -78,6 +78,31 @@ def dial() -> Image.Image:
     return image
 
 
+def drawflow() -> Image.Image:
+    image, draw = tile()
+    draw.rounded_rectangle((26, 40, 66, 104), 8, outline=BLUE, width=STROKE - 3)
+    draw.polygon([(80, 56), (118, 72), (80, 88)], fill=BLUE)
+    draw.line((66, 72, 80, 72), fill=BLUE, width=STROKE - 3)
+    return image
+
+
+def block() -> Image.Image:
+    image, draw = tile()
+    draw.polygon([(72, 26), (118, 50), (72, 74), (26, 50)], outline=AMBER, width=STROKE - 3)
+    draw.polygon([(26, 50), (72, 74), (72, 118), (26, 94)], fill=AMBER)
+    draw.polygon([(118, 50), (72, 74), (72, 118), (118, 94)], outline=AMBER, width=STROKE - 3)
+    return image
+
+
+def plot() -> Image.Image:
+    image, draw = tile()
+    draw.rounded_rectangle((26, 54, 118, 104), 10, outline=WHITE, width=STROKE - 3)
+    draw.rectangle((46, 30, 98, 54), fill=WHITE)
+    draw.rectangle((46, 90, 98, 120), fill=TILE, outline=WHITE, width=STROKE - 4)
+    draw.ellipse((100, 64, 110, 74), fill=GREEN)
+    return image
+
+
 ICONS = {
     "category": category,
     "macro": macro,
@@ -87,6 +112,9 @@ ICONS = {
     "layer-off": lambda: layer(False),
     "status": status,
     "dial": dial,
+    "drawflow": drawflow,
+    "block": block,
+    "plot": plot,
 }
 
 

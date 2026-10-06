@@ -18,6 +18,9 @@ BUSY_HRESULTS = {RPC_E_CALL_REJECTED, RPC_E_SERVERCALL_RETRYLATER}
 BUSY_RETRIES = 3
 BUSY_RETRY_DELAY_S = 0.3
 CALL_TIMEOUT_S = 10.0
+PLOT_TIMEOUT_S = 120.0
+ANONYMOUS_BLOCK_PREFIX = "*"
+PDF_PLOTTER = "DWG To PDF.pc3"
 
 Job = tuple[Callable[[], Any], Future]
 
@@ -54,10 +57,10 @@ class ComAutocadBridge:
         self._app = None
         return AutocadError(str(error))
 
-    def _submit(self, fn: Callable[[], Any]) -> Any:
+    def _submit(self, fn: Callable[[], Any], timeout: float = CALL_TIMEOUT_S) -> Any:
         future: Future = Future()
         self._jobs.put((fn, future))
-        return future.result(timeout=CALL_TIMEOUT_S)
+        return future.result(timeout=timeout)
 
     def _document(self) -> Any:
         if self._app is None:
@@ -123,6 +126,54 @@ class ComAutocadBridge:
 
     def prompt(self, message: str) -> None:
         self._submit(lambda: self._document().Utility.Prompt(message + "\n"))
+
+    def list_blocks(self) -> list[str]:
+        def read_names() -> list[str]:
+            blocks = self._document().Blocks
+            names = []
+            for index in range(blocks.Count):
+                block = blocks.Item(index)
+                if block.IsLayout or block.IsXRef or block.Name.startswith(ANONYMOUS_BLOCK_PREFIX):
+                    continue
+                names.append(block.Name)
+            return sorted(names, key=str.lower)
+
+        return self._submit(read_names)
+
+    def list_page_setups(self) -> list[str]:
+        def read_names() -> list[str]:
+            setups = self._document().PlotConfigurations
+            return sorted((setups.Item(index).Name for index in range(setups.Count)), key=str.lower)
+
+        return self._submit(read_names)
+
+    def plot(self, page_setup: str, pdf_path: str | None) -> None:
+        def run_plot() -> None:
+            document = self._document()
+            document.ActiveLayout.CopyFrom(self._page_setup(document, page_setup))
+            if pdf_path:
+                document.Plot.PlotToFile(pdf_path, PDF_PLOTTER)
+            else:
+                document.Plot.PlotToDevice()
+
+        self._submit(run_plot, timeout=PLOT_TIMEOUT_S)
+
+    def _page_setup(self, document: Any, name: str) -> Any:
+        setups = document.PlotConfigurations
+        for index in range(setups.Count):
+            setup = setups.Item(index)
+            if setup.Name.lower() == name.lower():
+                return setup
+        raise AutocadError(f"mise en page introuvable dans ce dessin : {name}")
+
+    def drawing_path(self) -> str | None:
+        def read_path() -> str | None:
+            document = self._document()
+            if not document.GetVariable("DWGTITLED"):
+                return None
+            return str(document.FullName)
+
+        return self._submit(read_path)
 
     def reset(self) -> None:
         def drop() -> None:

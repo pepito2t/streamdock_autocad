@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.bridge.autocad_bridge import AutocadNotRunning
+from src.bridge.autocad_bridge import AutocadError, AutocadNotRunning
 from src.core.logger import Logger
 
 DEFAULT_VARS: dict[str, Any] = {
@@ -11,6 +11,8 @@ DEFAULT_VARS: dict[str, Any] = {
     "OSMODE": 4133,
     "LWDISPLAY": 0,
     "DWGNAME": "Drawing1.dwg",
+    "DWGPREFIX": "C:\\Plans\\",
+    "DWGTITLED": 1,
 }
 
 
@@ -21,6 +23,9 @@ class FakeAutocadBridge:
         self.layers: set[str] = {"0"}
         self.sent: list[str] = []
         self.prompts: list[str] = []
+        self.blocks: list[str] = ["Porte", "Fenetre"]
+        self.page_setups: list[str] = ["A3 PDF", "A1 Traceur"]
+        self.plots: list[tuple[str, str | None]] = []
 
     def _check_running(self) -> None:
         if not self.running:
@@ -56,6 +61,26 @@ class FakeAutocadBridge:
     def prompt(self, message: str) -> None:
         self._check_running()
         self.prompts.append(message)
+
+    def list_blocks(self) -> list[str]:
+        self._check_running()
+        return sorted(self.blocks, key=str.lower)
+
+    def list_page_setups(self) -> list[str]:
+        self._check_running()
+        return sorted(self.page_setups, key=str.lower)
+
+    def plot(self, page_setup: str, pdf_path: str | None) -> None:
+        self._check_running()
+        if page_setup not in self.page_setups:
+            raise AutocadError(f"mise en page introuvable : {page_setup}")
+        self.plots.append((page_setup, pdf_path))
+
+    def drawing_path(self) -> str | None:
+        self._check_running()
+        if not self.vars["DWGTITLED"]:
+            return None
+        return str(self.vars["DWGPREFIX"]) + str(self.vars["DWGNAME"])
 
     def reset(self) -> None:
         pass

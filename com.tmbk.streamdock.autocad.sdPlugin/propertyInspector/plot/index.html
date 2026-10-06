@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>AutoCAD - Imprimer</title>
+  <link rel="stylesheet" href="../../static/css/sdpi.css" />
+  <link rel="stylesheet" href="../../static/css/autocad.css" />
+</head>
+<body>
+  <div class="sdpi-wrapper" style="display: none">
+    <div type="select" class="sdpi-item">
+      <div class="sdpi-item-label">Mise en page</div>
+      <select id="page-setup-select" class="sdpi-item-value"></select>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <button id="refresh-page-setups" class="sdpi-item-value">Rafraîchir la liste</button>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Nom</div>
+      <input id="page-setup" class="sdpi-item-value" placeholder="Nom de la mise en page" />
+    </div>
+    <div type="radio" class="sdpi-item">
+      <div class="sdpi-item-label">Sortie</div>
+      <div class="sdpi-item-value">
+        <span class="sdpi-item-child">
+          <input id="mode-device" type="radio" name="mode" value="device" checked />
+          <label for="mode-device" class="sdpi-item-label"><span></span>Périphérique de la mise en page</label>
+        </span>
+        <span class="sdpi-item-child">
+          <input id="mode-pdf" type="radio" name="mode" value="pdf" />
+          <label for="mode-pdf" class="sdpi-item-label"><span></span>PDF</label>
+        </span>
+      </div>
+    </div>
+    <div class="sdpi-item" id="output-folder-item">
+      <div class="sdpi-item-label">Dossier PDF</div>
+      <input id="output-folder" class="sdpi-item-value" placeholder="C:\Plans\PDF" />
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <div class="sdpi-item-value hint">Imprime la présentation courante avec la mise en page choisie, sans boîte de dialogue. En PDF, le fichier prend le nom du dessin.</div>
+    </div>
+  </div>
+  <script src="../../static/utils/common.js"></script>
+  <script src="../../static/action.js"></script>
+  <script src="../../static/autocad-pi.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

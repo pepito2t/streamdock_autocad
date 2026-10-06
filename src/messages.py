@@ -1,4 +1,5 @@
 from src.bridge.autocad_bridge import AutocadBusy, AutocadError, AutocadNotRunning
+from src.drawflow_client import DrawflowError
 from src.macros.macro import InvalidMacro
 
 NOT_RUNNING = "AutoCAD n'est pas ouvert, ou aucun dessin n'est actif."
@@ -11,6 +12,8 @@ def describe_error(error: Exception) -> str:
         return NOT_RUNNING
     if isinstance(error, AutocadBusy):
         return BUSY
+    if isinstance(error, DrawflowError):
+        return str(error)
     if isinstance(error, InvalidMacro):
         return f"Macro invalide : {error}"
     if isinstance(error, AutocadError):

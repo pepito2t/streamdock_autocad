@@ -1,6 +1,6 @@
 {
   "Name": "AutoCAD",
-  "Version": "0.2.0",
+  "Version": "0.3.0",
   "Author": "tmbk",
   "Description": "Commandes, macros et état AutoCAD",
   "Category": "AutoCAD",
@@ -137,6 +137,69 @@
         "Keypad"
       ],
       "PropertyInspectorPath": "./propertyInspector/dial/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.drawflow",
+      "Name": "Drawflow",
+      "Tooltip": "Envoie le dessin ouvert à un module Drawflow",
+      "Icon": "images/drawflow.png",
+      "state": 0,
+      "States": [
+        {
+          "Image": "images/drawflow.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": false,
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "./propertyInspector/drawflow/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.block",
+      "Name": "Bloc",
+      "Tooltip": "Insère un bloc du dessin au point cliqué",
+      "Icon": "images/block.png",
+      "state": 0,
+      "States": [
+        {
+          "Image": "images/block.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "./propertyInspector/block/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.plot",
+      "Name": "Imprimer",
+      "Tooltip": "Imprime ou exporte en PDF avec une mise en page nommée",
+      "Icon": "images/plot.png",
+      "state": 0,
+      "States": [
+        {
+          "Image": "images/plot.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": true,
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "./propertyInspector/plot/index.html"
     }
   ]
 }

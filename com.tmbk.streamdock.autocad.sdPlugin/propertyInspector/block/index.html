@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>AutoCAD - Bloc</title>
+  <link rel="stylesheet" href="../../static/css/sdpi.css" />
+  <link rel="stylesheet" href="../../static/css/autocad.css" />
+</head>
+<body>
+  <div class="sdpi-wrapper" style="display: none">
+    <div type="select" class="sdpi-item">
+      <div class="sdpi-item-label">Blocs du dessin</div>
+      <select id="block-select" class="sdpi-item-value"></select>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label"></div>
+      <button id="refresh-blocks" class="sdpi-item-value">Rafraîchir la liste</button>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Bloc</div>
+      <input id="block" class="sdpi-item-value" placeholder="Nom du bloc" />
+    </div>
+    <div type="checkbox" class="sdpi-item">
+      <div class="sdpi-item-label">Échelle et rotation</div>
+      <div class="sdpi-item-value">
+        <span class="sdpi-item-child">
+          <input id="fixed" type="checkbox" checked />
+          <label for="fixed"><span></span>Fixes (sinon AutoCAD les demande)</label>
+        </span>
+      </div>
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Échelle</div>
+      <input id="scale" class="sdpi-item-value" placeholder="1" />
+    </div>
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Rotation (°)</div>
+      <input id="rotation" class="sdpi-item-value" placeholder="0" />
+    </div>
+  </div>
+  <script src="../../static/utils/common.js"></script>
+  <script src="../../static/action.js"></script>
+  <script src="../../static/autocad-pi.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
