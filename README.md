@@ -14,6 +14,7 @@ Plugin Stream Dock (Mirabox / logiciel HotSpot) pour piloter AutoCAD sous Window
 | Bloc    | Insère un bloc du dessin au point cliqué, échelle et rotation fixes ou demandées. Liste des blocs dans le panneau. |
 | Imprimer | Imprime la présentation courante avec une mise en page nommée, ou l'exporte en PDF (nom du dessin) dans un dossier. |
 | Molette | Sur un bouton rotatif : zoom (appui = zoom étendu), calque courant (appui = calque 0) ou annuler/rétablir (appui = régénérer). |
+| Console | Ouvre la fenêtre du journal du plugin (ou la ramène au premier plan). La touche affiche le nombre de nouvelles erreurs depuis la dernière ouverture. |
 
 ## Fonctionnement
 
@@ -50,6 +51,17 @@ complètent là-bas.
 Une action qui échoue affiche le triangle d'alerte, écrit le message dans la ligne de commande AutoCAD (préfixe « Stream Dock : »)
 et dans le panneau de la touche. Le plugin vérifie la dernière release GitHub toutes les six heures ; une version plus récente
 apparaît en haut du panneau de chaque touche avec un lien vers la page de téléchargement.
+
+### Envoyer le journal au support
+
+1. Appuyez sur la touche Console : la fenêtre « Journal du plugin AutoCAD » s'ouvre et suit le journal en direct.
+2. Choisissez « Erreurs » ou « Avertissements et erreurs » pour ne garder que les lignes utiles.
+3. Sélectionnez les lignes (clic, Maj+clic, Ctrl+clic, Ctrl+A), puis « Copier la sélection » (ou Ctrl+C), ou bien « Tout copier ».
+4. Collez dans votre courriel au support (Ctrl+V). La copie commence par la version du plugin, la version de Windows et la date.
+
+Les secrets sont masqués (`***`) dans le journal et la console : jeton de l'API locale Drawflow, valeurs `token=…`, suites
+de 32 caractères hexadécimaux ou plus. La console est le même `plugin.exe` relancé avec `--console <plugin.log>` dans un
+processus séparé, pour que l'interface ne bloque jamais la connexion à Stream Dock. Une seule fenêtre à la fois.
 
 ## Prérequis (poste Windows)
 
@@ -96,7 +108,8 @@ le test réel se fait sur le poste Windows.
 
 ```
 com.tmbk.streamdock.autocad.sdPlugin/   manifest, icônes, property inspectors, presets livrés
-src/core/                               SDK Python officiel Mirabox (non modifié)
+src/core/                               SDK Python officiel Mirabox (logger : tampon mémoire et masquage des secrets en plus)
+src/console/                            fenêtre du journal (tkinter), lecture/filtre/format, instance unique, lancement
 src/bridge/                             accès AutoCAD : protocole, impl COM, impl simulée
 src/macros/                             modèle de macro, store de presets, exécution
 src/actions/                            une classe par action (nom de fichier = dernier segment de l'UUID)
