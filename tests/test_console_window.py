@@ -1,10 +1,10 @@
-import tkinter as tk
-
 import pytest
 
-from src.console import window as console_window
-from src.console.app import EXIT_NO_DISPLAY, EXIT_OK, run_console
-from src.console.journal import LevelFilter, LogFollower
+tk = pytest.importorskip("tkinter")
+
+from src.console import window as console_window  # noqa: E402
+from src.console.app import EXIT_NO_DISPLAY, EXIT_OK, run_console  # noqa: E402
+from src.console.journal import LevelFilter, LogFollower  # noqa: E402
 
 HEADER = "AutoCAD plugin v0.3.0 · Windows 11 · 2026-10-07T10:00:00+02:00"
 LINES = [
@@ -15,15 +15,24 @@ LINES = [
 ]
 
 
-@pytest.fixture
-def root():
+def new_root() -> tk.Tk:
     try:
-        root = tk.Tk()
+        return tk.Tk()
     except tk.TclError as error:
         pytest.skip(f"no display: {error}")
+
+
+@pytest.fixture
+def root():
+    root = new_root()
     root.withdraw()
     yield root
     root.destroy()
+
+
+@pytest.fixture
+def display_available() -> None:
+    new_root().destroy()
 
 
 @pytest.fixture
@@ -88,5 +97,6 @@ def test_console_without_display_exits_cleanly(log, monkeypatch):
     assert run_console([str(log), "--smoke"]) == EXIT_NO_DISPLAY
 
 
-def test_console_smoke_mode_builds_and_closes_window(root, log):
+# Without the root fixture: two live Tk interpreters fail intermittently on Windows runners.
+def test_console_smoke_mode_builds_and_closes_window(display_available, log):
     assert run_console([str(log), "--smoke"]) == EXIT_OK
