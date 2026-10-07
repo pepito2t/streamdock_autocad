@@ -103,6 +103,14 @@ def plot() -> Image.Image:
     return image
 
 
+def console() -> Image.Image:
+    image, draw = tile()
+    draw.rounded_rectangle((20, 30, 124, 114), 10, outline=WHITE, width=STROKE - 4)
+    draw.line([(38, 54), (58, 72), (38, 90)], fill=GREEN, width=STROKE - 2, joint="curve")
+    draw.line((66, 92, 104, 92), fill=GREEN, width=STROKE - 2)
+    return image
+
+
 ICONS = {
     "category": category,
     "macro": macro,
@@ -115,6 +123,7 @@ ICONS = {
     "drawflow": drawflow,
     "block": block,
     "plot": plot,
+    "console": console,
 }
 
 
