@@ -1,7 +1,20 @@
 import logging
 import os
 import sys
+from pathlib import Path
 from typing import Optional
+
+from src.drawflow_client import load_connection
+
+from .log_capture import MemoryLogHandler, SecretMaskingFilter
+
+LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+
+def drawflow_tokens() -> list[str]:
+    connection = load_connection()
+    return [connection.token] if connection else []
+
 
 class Logger:
     """全局日志管理类
@@ -12,6 +25,9 @@ class Logger:
     
     _instance: Optional['Logger'] = None
     _logger: Optional[logging.Logger] = None
+    _memory_handler: Optional[MemoryLogHandler] = None
+    _secret_filter: Optional[SecretMaskingFilter] = None
+    _log_file: Optional[Path] = None
     
     def __new__(cls) -> 'Logger':
         if cls._instance is None:
@@ -33,13 +49,17 @@ class Logger:
     @classmethod
     def _setup_logger(cls):
         """设置日志记录器
-        
+
         配置日志记录器的输出格式、日志级别和输出文件。
         """
         if cls._logger is None:
             cls._logger = logging.getLogger('StreamDock')
             cls._logger.setLevel(logging.INFO)
-            
+            cls._memory_handler = MemoryLogHandler()
+            cls._secret_filter = SecretMaskingFilter(drawflow_tokens)
+            cls._add_handler(cls._memory_handler)
+            cls._add_handler(logging.StreamHandler())
+
             # 获取日志目录路径
             if getattr(sys, 'frozen', False):
                 # 如果是打包后的exe
@@ -47,30 +67,31 @@ class Logger:
             else:
                 # 如果是开发环境
                 base_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'logs')
-            
-            # 确保日志目录存在
+
+            log_file = os.path.join(base_path, 'plugin.log')
             try:
                 os.makedirs(base_path, exist_ok=True)
-                
-                # 设置日志文件路径
-                log_file = os.path.join(base_path, 'plugin.log')
-                
-                # 创建文件处理器
-                handler = logging.FileHandler(log_file, encoding='utf-8')
-                handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-                cls._logger.addHandler(handler)
-                
-                # 添加控制台输出
-                console_handler = logging.StreamHandler()
-                console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-                cls._logger.addHandler(console_handler)
-            except Exception as e:
-                print(f"Failed to setup file handler: {e}")
-                # 如果文件处理器设置失败，至少确保控制台输出正常工作
-                console_handler = logging.StreamHandler()
-                console_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-                cls._logger.addHandler(console_handler)
-    
+                cls._add_handler(logging.FileHandler(log_file, encoding='utf-8'))
+                cls._log_file = Path(log_file)
+            except OSError as e:
+                cls._logger.error(f"Failed to setup file handler: {e}")
+
+    @classmethod
+    def _add_handler(cls, handler: logging.Handler) -> None:
+        handler.setFormatter(logging.Formatter(LOG_FORMAT))
+        handler.addFilter(cls._secret_filter)
+        cls._logger.addHandler(handler)
+
+    @classmethod
+    def memory(cls) -> MemoryLogHandler:
+        cls.get_logger()
+        return cls._memory_handler
+
+    @classmethod
+    def log_file(cls) -> Optional[Path]:
+        cls.get_logger()
+        return cls._log_file
+
     @classmethod
     def get_logger(cls) -> logging.Logger:
         """获取日志记录器实例

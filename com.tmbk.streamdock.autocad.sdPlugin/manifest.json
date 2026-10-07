@@ -200,6 +200,27 @@
         "Keypad"
       ],
       "PropertyInspectorPath": "./propertyInspector/plot/index.html"
+    },
+    {
+      "UUID": "com.tmbk.streamdock.autocad.console",
+      "Name": "Console",
+      "Tooltip": "Affiche le journal du plugin pour l'envoyer au support",
+      "Icon": "images/console.png",
+      "state": 0,
+      "States": [
+        {
+          "Image": "images/console.png",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "Settings": {},
+      "UserTitleEnabled": false,
+      "SupportedInMultiActions": false,
+      "Controllers": [
+        "Keypad"
+      ],
+      "PropertyInspectorPath": "./propertyInspector/console/index.html"
     }
   ]
 }
